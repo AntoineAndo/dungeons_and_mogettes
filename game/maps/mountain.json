@@ -1,0 +1,8 @@
+{
+	"name":"mountain",
+	"fancyname":"Montagne neigeuse",
+	"links":[
+		"start",
+		"forest"
+	],
+}

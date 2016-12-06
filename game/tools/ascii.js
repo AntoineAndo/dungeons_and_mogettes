@@ -5,13 +5,18 @@ const GAME_SCENE_HEIGHT = 50;
 module.exports = {
 	fileToJson: function (filePath, callback) {
 		var jso = [];
+		var lineCount = 0;
 		var lineReader = require('readline').createInterface({
 		  input: require('fs').createReadStream(filePath)
 		});
 
 		lineReader.on('line', function (line) {
 		  line = line.replace(/'/g, "`");
-		  jso.push(line);
+
+		  if(lineCount < GAME_SCENE_HEIGHT)
+		 	 jso.push(line);
+
+		  lineCount++;
 		});
 
 		lineReader.on('close', function() {
@@ -21,36 +26,34 @@ module.exports = {
 
 	bottomMenu: function (choices) {
 		var jsoMenu = [];
-		jsoMenu.push("###########################################################################################");
-		jsoMenu.push("#                                                                                         #");
-		var commandLine = "# ";
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 		choices.forEach(function(c, index) {
-			c = "[" + index + "] " + c;
-			commandLine += c;
+			var commandLine = "  [" + index + "] " + c;
+			jsoMenu.push(commandLine);
 		});
-		commandLine += " #";
-		jsoMenu.push("#                                                                                         #");
-		jsoMenu.push("###########################################################################################");
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 
 		return jsoMenu;
 	},
 
-	gameScreen: function(life, mana, scene, choices) {
+	gameScreen: function(life, mana, scene, choices, callback) {
 		// BAR STATS
 
-		// GAME SCENE ASCII
-		this.fileToJson('./game/ascii/test', function(jso) {
-				gameScene = jso;
-		  });
 		// BOTTOM MENU ACTION
 		var actions = this.bottomMenu(choices);
 
+		// GAME SCENE ASCII
+		this.fileToJson('./game/ascii/test', function(jso) {
+			gameScene = jso;
 
-		var fullGameScreen = [];
-		// TODO: bar
-		fullGameScreen.concat(gameScene);
-		fullGameScreen.concat(actions);
+			var fullGameScreen = [];
+			// TODO: bar
+			fullGameScreen = fullGameScreen.concat(gameScene, actions);
 
-		return fullGameScreen;
+			console.log(fullGameScreen);
+
+			callback(fullGameScreen);
+		  });
+		
 	}
 };
