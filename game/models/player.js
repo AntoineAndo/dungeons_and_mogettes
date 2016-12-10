@@ -1,14 +1,16 @@
-var mongoose = require('mongoose');
+var mongoose    = require('mongoose');
+var fightSchema = require('./fight');
 
 // define the schema for our fight model
 var playerSchema = mongoose.Schema({
-		name: String,
-		token : String,
-    life : Number,
-    map : {type : String, default: "start"},
-    money: {type: Number, default: 0},
-    created_at: Date,
-  	updated_at: Date
+		name        : String,
+		token       : String,
+    life        : Number,
+    map         : {type : String, default: "start"},
+    money       : {type: Number, default: 0},
+    fight       : {type: mongoose.Schema.Types.ObjectId,  ref: 'Fight'},
+    created_at  : Date,
+  	updated_at  : Date
 });
 
 // on every save, add the date
