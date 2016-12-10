@@ -11,7 +11,8 @@ module.exports = {
 		});
 
 		lineReader.on('line', function (line) {
-		  line = line.replace(/'/g, "`");
+		  line = line.replace(/'/g, "`"); // Escape ascci character `
+		  line = line.replace(/'/g, "\\'"); // Escape ascci character \
 
 		  if(lineCount < GAME_SCENE_HEIGHT)
 		 	 jso.push(line);
@@ -43,7 +44,7 @@ module.exports = {
 		var actions = this.bottomMenu(choices);
 
 		// GAME SCENE ASCII
-		this.fileToJson('./game/ascii/test', function(jso) {
+		this.fileToJson('./game/ascii/mobs/snake', function(jso) {
 			gameScene = jso;
 
 			var fullGameScreen = [];

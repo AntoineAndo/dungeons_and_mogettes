@@ -9,11 +9,26 @@ var tools = require('../game/tools/ascii');
 // GET /character
 
 /* GET replay last scene */
-router.get('/', function(req, res, next) {
+router.get('/play/', function(req, res, next) {
+	console.log(req);
   tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
   	console.log(jso);
   	res.render('index', { screen: jso });
   });
+});
+
+/* GET play action */
+router.get('/play/:id', function(req, res, next) {
+	try {
+	  console.log(req.param.id);
+	  tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
+	  	console.log(jso);
+	  	res.send({ screen: jso });
+	  });
+	}
+	catch(err) {
+		console.log(err);
+	}
 });
 
 module.exports = router;
