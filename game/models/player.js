@@ -29,5 +29,10 @@ playerSchema.methods.createAccount = function() {
     return this.player_token + this.monster_id;
 };
 
+
+playerSchema.methods.isInFight = function() {
+    return this.Fight === undefied ? false : true;
+};
+
 // create the model for fight and expose it to our app
 module.exports = mongoose.model('Player', playerSchema);

@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var tools = require('../game/tools/gameEngine');
 var tools = require('../game/tools/ascii');
 var Player 		= require('../game/models/player');
 
@@ -37,20 +38,24 @@ router.get('/play/', function(req, res, next) {
 	  if(playerToken === undefined)
 	  	throw new Error("Vous devez renseigner un token de jeu dans le header de votre requète");
 
+
+
+	  gameEngine.loadState(playerToken);
+
+
+
 	  // fetch player with token
 	  Player.find({ token: playerToken }, function(err, user) {
 		  if (err) throw err;
 
 		  // object of the user
 		  console.log(user);
+
+		  // load last game screen
+		  tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
+				res.render('index', { screen: jso });
+			});
 		});
-
-	  // load last game screen
-
-
-	tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
-		res.render('index', { screen: jso });
-	});
 
 });
 
@@ -65,11 +70,11 @@ router.get('/play/:action', function(req, res, next) {
 	  if(playerToken === undefined)
 	  	throw new Error("Vous devez renseigner un token de jeu dans le header de votre requète");
 
-	  // fetch player with token
 
-	  // deal with action
 
-	  // load according game screen
+	  gameEngine.loadState(playerToken, action);
+
+
 
 	  tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
 	  	res.send({ screen: jso });
