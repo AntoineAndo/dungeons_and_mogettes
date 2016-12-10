@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var asciiHelper = require('../utils/asciiHelper');
+var asciiHelper = require('../game/tools/asciiHelper');
 
 router.get('/', function(req, res, next) {
 

@@ -15,4 +15,4 @@ exports.getAsciiFromImage = getAsciiFromImage = function(url, callback){
 	}, (err, converted) => {
 		callback(err || converted);
 	});
-}
+};
