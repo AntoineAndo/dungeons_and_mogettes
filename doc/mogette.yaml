@@ -1,0 +1,112 @@
+swagger: '2.0'
+info:
+  title: Dungeons & Mogettes
+  description: Les aventures vendéenes qui se jouent sans interface graphique
+  version: "1.0.0"
+# the domain of the service
+host: localhost:8080
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /play:
+    get:
+      summary: Retourne l'écran de jeu actuel en fonction de la progression du joueur
+      description: |
+        An array of available campaigns for user
+      parameters:
+        - name: playerToken
+          in: header
+          description: Token that identify the player
+          required: true
+          type: string
+          format: string
+      tags:
+        - Gameplay
+      responses:
+        200:
+          description: Ecran de jeu format json
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Screen'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /play/{action}:
+    post:
+      summary: Effectue une action parmis celle affiché sur l'écran de jeu
+      description: Réalise l'action puis retourne en réponse un nouvel écran
+      parameters:
+        - name: action
+          in: path
+          description: Nom ou numéro de l'action à réaliser
+          required: true
+          type: string
+          format: string
+      tags:
+        - Gameplay
+      responses:
+        200:
+          description: Ecran de jeu format json
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Screen'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'  
+  /register/{pseudo}:
+    post:
+      summary: Créer un nouveau compte de jeux
+      description: Retourne le token de joueur après création de compte réussie
+      parameters:
+        - name: pseudo
+          in: path
+          description: Pseudonyme du joueur
+          required: true
+          type: string
+          format: string
+      tags:
+        - Account
+      responses:
+        200:
+          description: A boolean to tell if subscription is successful
+          schema:
+            type: boolean
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'          
+definitions:
+  Screen:
+    type: object
+    properties:
+      ascii:
+        type: string
+        description: Array of ascii pixels representing the screen
+  Player:
+    type: object
+    properties:
+      token:
+        type: string
+        description: Token de joueur
+      pseudo:
+        type: string
+        description: Pseudonyme du joueur.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
