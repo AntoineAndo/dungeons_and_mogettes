@@ -1,3 +1,4 @@
+/*
 const imageToAscii = require("image-to-ascii");
 
 exports.getAsciiFromImage = getAsciiFromImage = function(url, callback){
@@ -16,3 +17,4 @@ exports.getAsciiFromImage = getAsciiFromImage = function(url, callback){
 		callback(err || converted);
 	});
 };
+*/
