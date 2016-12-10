@@ -1,5 +1,5 @@
-var Player = require('../game/models/player');
-var tools = require('../game/tools/ascii');
+var Player = require('../models/player');
+var tools = require('./ascii');
 
 module.exports = {
 	loadState: function (token, action) {
@@ -25,7 +25,7 @@ module.exports = {
 	loadMap: function(player) {
 
 		// get player map
-		
+
 
 		// get map choices
 
