@@ -1,7 +1,7 @@
 var express 	= require('express');
 var router 		= express.Router();
-var CombatDao 	= require('../game/dal/combatDao');
-var combatDao 	= new CombatDao();
+//var CombatDao 	= require('../game/dal/combatDao');
+// var combatDao 	= new CombatDao();
 var Fight 		= require('../game/models/fight');
 var asciiHelper = require('../game/tools/asciiHelper');
 

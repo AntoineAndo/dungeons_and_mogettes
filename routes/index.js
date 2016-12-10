@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var tools = require('../game/tools/ascii');
+var Player 		= require('../game/models/player');
 
 //TODOs:
 // GET /play (replay last scene)
@@ -9,25 +10,74 @@ var tools = require('../game/tools/ascii');
 // GET /character
 
 /* GET replay last scene */
+router.post('/register/:name', function(req, res, next) {
+
+	var playerName = req.params.name;
+	var generatedToken = Array(20+1).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 20);
+
+	var newPlayer = new Player({
+	  name: playerName,
+	  token: generatedToken,
+	});
+
+	newPlayer.save(function(err) {
+	  if (err) throw err;
+		  console.log('User created!');
+
+		res.send({token: generatedToken});
+	});
+
+});
+
+
+/* GET replay last scene */
 router.get('/play/', function(req, res, next) {
-	console.log(req);
-  tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
-  	console.log(jso);
-  	res.render('index', { screen: jso });
-  });
+
+	var playerToken = req.headers.token; // must be set as header with name "token"
+	  if(playerToken === undefined)
+	  	throw new Error("Vous devez renseigner un token de jeu dans le header de votre requète");
+
+	  // fetch player with token
+	  Player.find({ token: playerToken }, function(err, user) {
+		  if (err) throw err;
+
+		  // object of the user
+		  console.log(user);
+		});
+
+	  // load last game screen
+
+
+	tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
+		res.render('index', { screen: jso });
+	});
+
 });
 
 /* GET play action */
-router.get('/play/:id', function(req, res, next) {
+router.get('/play/:action', function(req, res, next) {
+
 	try {
-	  console.log(req.param.id);
+
+	  var action = req.params.action;
+
+	  var playerToken = req.headers.token; // must be set as header with name "token"
+	  if(playerToken === undefined)
+	  	throw new Error("Vous devez renseigner un token de jeu dans le header de votre requète");
+
+	  // fetch player with token
+
+	  // deal with action
+
+	  // load according game screen
+
 	  tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
-	  	console.log(jso);
 	  	res.send({ screen: jso });
 	  });
 	}
-	catch(err) {
-		console.log(err);
+	catch(ex) {
+		res.status(500).send({error: ex.message});
+		
 	}
 });
 

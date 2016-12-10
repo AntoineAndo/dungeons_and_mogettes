@@ -8,7 +8,7 @@ var fightSchema = mongoose.Schema({
 
 fightSchema.methods.toString = function() {
     return this.player_token + this.monster_id;
-}
+};
 
 // create the model for fight and expose it to our app
 module.exports = mongoose.model('Fight', fightSchema);
