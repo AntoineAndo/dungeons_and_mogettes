@@ -67,7 +67,6 @@ router.get('/play/:action', function(req, res, next) {
 
 
 	  gameEngine.loadState(playerToken, action, function(scene) {
-			console.log(scene);
 			res.send({ screen: scene });
 		});
 
