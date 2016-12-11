@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var tools = require('../game/tools/gameEngine');
+var gameEngine = require('../game/tools/gameEngine');
 var tools = require('../game/tools/ascii');
 var Player 		= require('../game/models/player');
 
@@ -48,11 +48,8 @@ router.get('/play/', function(req, res, next) {
 	  Player.find({ token: playerToken }, function(err, user) {
 		  if (err) throw err;
 
-		  // object of the user
-		  console.log(user);
-
 		  // load last game screen
-		  tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
+		  tools.gameScreen("life", "mana", "start", ["Test", "Nope"],function(jso) {
 				res.render('index', { screen: jso });
 			});
 		});
@@ -76,7 +73,7 @@ router.get('/play/:action', function(req, res, next) {
 
 
 
-	  tools.gameScreen("life", "mana", "scene", ["Test", "Nope"],function(jso) {
+	  tools.gameScreen("life", "mana", "start", ["Test", "Nope"],function(jso) {
 	  	res.send({ screen: jso });
 	  });
 	}

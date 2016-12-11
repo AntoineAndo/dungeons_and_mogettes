@@ -39,12 +39,12 @@ module.exports = {
 
 	gameScreen: function(life, mana, scene, choices, callback) {
 		// BAR STATS
-
+		
 		// BOTTOM MENU ACTION
 		var actions = this.bottomMenu(choices);
 
 		// GAME SCENE ASCII
-		this.fileToJson('./game/ascii/mobs/snake', function(jso) {
+		this.fileToJson('./game/ascii/maps/' + scene, function(jso) {
 			gameScene = jso;
 
 			var fullGameScreen = [];

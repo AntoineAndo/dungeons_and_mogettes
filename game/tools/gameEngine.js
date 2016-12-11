@@ -2,19 +2,18 @@ var Player = require('../models/player');
 var tools = require('./ascii');
 
 module.exports = {
-	loadState: function (token, action) {
+	loadState: function (playerToken, action) {
 
-		Player.find({ token: playerToken }, function(err, player) {
+		Player.findOne({ token: playerToken }, function(err, player) {
 		  if (err) throw err;
+		  if (player === undefined) throw Error("Token de joueur introuvable");
 
-		  // object of the user
-		  console.log(player);
 
 		  // Si il n'y a pas d'action on se contente de charger l'état actuel de la partie
 		  if(!player.isInFight) {
-		  	this.loadMap(player);
+		  	console.log(module.exports.loadMap(player));
 			} else {
-				this.loadFight(player);
+				module.exports.loadFight(player);
 			}
 
 
@@ -24,8 +23,13 @@ module.exports = {
 	},
 	loadMap: function(player) {
 
-		// get player map
+		console.log('loading map' + player.map);
 
+		// get player map
+		tools.gameScreen(player.life, "mana", player.map, ["Test", "Nope"],function(screen) {
+	  	return screen;
+	  });
+	  
 
 		// get map choices
 
