@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 // define the schema for our fight model
 var mobSchema = mongoose.Schema({
-		name  : String,
+	name  : String,
     life  : Number,
     exp   : Number,
     gold  : Number

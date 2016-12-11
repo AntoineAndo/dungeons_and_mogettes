@@ -33,8 +33,8 @@ module.exports = {
 
 		// get player map
 		tools.gameScreen(player, mapData.ascii, choices, function(screen) {
-	  	callback(screen);
-	  });
+		  	callback(screen);
+		});
 	  
 
 		// get map choices
@@ -42,9 +42,26 @@ module.exports = {
 		// % chance agro mob
 
 	},
-	loadFight: function(player) {
+	loadFight: function(player, callback) {
 
-		// get player fight
+		console.log('loading fight : ' + player.fight);
+
+		Fight.findOne({ _id: player.fight }, function (err, fight) {
+			// Db error handling for fight
+		  	if (err) return handleError(err);
+
+	  		console.log("Fight linked to player found : " + fight)
+	  		Mob.findOne({ _id: fight.mob }, function (err, fight) {
+	  			// Db error handling for linked mob
+			  	if (err) return handleError(err);
+
+			  	var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
+
+			  	tools.fightScreen(player, mobData, choices, function(screen) {
+				  	callback(screen);
+				});
+			})
+		})
 
 	},
 	manageAction: function(action) {

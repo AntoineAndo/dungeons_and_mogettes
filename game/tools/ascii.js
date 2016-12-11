@@ -64,7 +64,27 @@ module.exports = {
 			fullGameScreen = fullGameScreen.concat(top, gameScene, actions);
 
 			callback(fullGameScreen);
-		  });
+		});
+		
+	},
+
+	fightScreen: function(player, mob, choices, callback) {
+
+		// BAR STATS
+		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
+		
+		// BOTTOM MENU ACTION
+		var actions = this.bottomMenu(choices);
+
+		// GAME SCENE ASCII
+		this.fileToJson('./game/ascii/mobs/' + mob.ascii, function(jso) {
+			gameScene = jso;
+
+			var fullGameScreen = [];
+			fullGameScreen = fullGameScreen.concat(top, gameScene, actions);
+
+			callback(fullGameScreen);
+		});
 		
 	}
 };
