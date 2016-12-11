@@ -39,6 +39,8 @@ module.exports = {
 	bottomMenu: function (mapName, description, choices) {
 		var jsoMenu = [];
 		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
+		jsoMenu.push("  [ " + mapName.toUpperCase() + " ] "+ description);
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 		choices.forEach(function(c, index) {
 			var commandLine = "  [" + index + "] " + c;
 			jsoMenu.push(commandLine);
@@ -48,16 +50,16 @@ module.exports = {
 		return jsoMenu;
 	},
 
-	gameScreen: function(player, scene, choices, callback) {
+	gameScreen: function(player, mapData, callback) {
 
 		// BAR STATS
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
-		var actionMenu = this.actionMenu(null, null, choices);
+		var actions = this.bottomMenu(mapData.fancyname, mapData.description, mapData.links);
 
 		// GAME SCENE ASCII
-		this.fileToJson('./game/ascii/maps/' + scene, function(jso) {
+		this.fileToJson('./game/ascii/maps/' + mapData.ascii, function(jso) {
 			gameScene = jso;
 
 			var fullGameScreen = [];

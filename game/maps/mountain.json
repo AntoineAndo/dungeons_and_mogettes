@@ -2,6 +2,7 @@
 	"name":"mountain",
 	"fancyname":"Montagne neigeuse",
 	"ascii":"mountain",
+	"description":"Une montagne imposante se dresse devant vous",
 	"links":[
 		"start",
 		"forest"
