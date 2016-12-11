@@ -11,7 +11,8 @@ var playerSchema = mongoose.Schema({
     money       : {type: Number, default: 50},
     fight       : {type: mongoose.Schema.Types.ObjectId,  ref: 'Fight'},
     created_at  : Date,
-  	updated_at  : Date
+  	updated_at  : Date,
+    fightMoves  : []
 });
 
 // on every save, add the date

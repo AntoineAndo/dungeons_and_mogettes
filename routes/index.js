@@ -19,6 +19,10 @@ router.post('/register/:name', function(req, res, next) {
 	var newPlayer = new Player({
 	  name: playerName,
 	  token: generatedToken,
+	  fightMoves: JSON.stringify({"fightMoves":[
+                    {id: 1, name:"Sword Slash", damages: 20, cooldown:0, maxCooldown:5},
+                    {id: 2, name:"Fireball", damages: 50, cooldown:0, maxCooldown:5},
+                  ]})
 	});
 
 	newPlayer.save(function(err) {
@@ -37,7 +41,6 @@ router.get('/play/', function(req, res, next) {
 	var playerToken = req.headers.token; // must be set as header with name "token"
 	  if(playerToken === undefined)
 	  	throw new Error("Vous devez renseigner un token de jeu dans le header de votre requète");
-
 
 		gameEngine.loadState(playerToken, null, function(scene) {
 			console.log(scene);

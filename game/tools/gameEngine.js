@@ -3,7 +3,7 @@ var Fight = require('../models/fight');
 var Mob = require('../models/mob');
 var tools = require('./ascii');
 var fs = require('fs');
-
+var _ = require('lodash-node');
 
 module.exports = {
 	loadState: function (playerToken, action, callback) {
@@ -26,9 +26,15 @@ module.exports = {
 	  	 	}
 
 			} else {
-				module.exports.loadFight(player, function(screen){
-					callback(screen);
-				});
+			  	if(action === null) {
+				  	module.exports.loadFight(player,function(screen) {
+				  		callback(screen);
+				  	});
+		  	 	} else {
+		  	 		module.exports.manageFightAction(player, action, function(screen) {
+				  		callback(screen);
+				  	});
+		  	 	}
 			}
 
 
@@ -76,8 +82,40 @@ module.exports = {
 		});
 
 	},
-	manageAction: function(player, action, callback) {
+	manageFightAction: function(player, action, callback){
+		var choicesArray = player.fightMoves;
+		var maxChoiceNumber = player.fightMoves.length;
+		console.log(maxChoiceNumber)
 
+		if(typeof action != "number" && action > maxChoiceNumber)
+			throw Error("Votre action ne correspond à aucun choix possible pour ce combat");
+
+		var actionToDo = _.find(choicesArray, {id: action})
+
+		Fight.findOne({ _id: player.fight }, function (err, fight) {
+			// Db error handling for fight
+		  	if (err) return handleError(err);
+
+	  		console.log("Fight linked to player found : " + fight)
+	  		Mob.findOne({ _id: fight.monster }, function (err, mob) {
+	  			// Db error handling for linked mob
+			  	if (err) return handleError(err);
+			  		
+			  	console.log(mob)
+
+			  	Mob.update({ _id: fight.mob }, {life: mob.life - actionToDo.damages})
+
+			  	var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
+
+			  	tools.fightScreen(player, mobData, choices, function(screen) {
+				  	callback(screen);
+				});
+			})
+		})
+
+	},
+	manageAction: function(player, action, callback) {
+		console.log(player)
 		var previousMapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
 		var choicesArray = previousMapData.links;
 		var maxChoiceNumber = previousMapData.links.length - 1;
