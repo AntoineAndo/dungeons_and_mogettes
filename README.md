@@ -1,6 +1,6 @@
 # DUNGEONS & MOGETTES                    
  
-API RPG game using ASII to display graphics
+API RPG game using ASCII to display graphics
 
 ## Techno stack
 NodeJS 6.9.2
@@ -23,3 +23,6 @@ Npm 3.10.9
 
 ## Documentaion
 A swagger describing the API routes is available under doc folder
+
+## Tests
+To run tests run command `npm test`
