@@ -1,4 +1,6 @@
 var Player = require('../models/player');
+var Fight = require('../models/fight');
+var Mob = require('../models/mob');
 var tools = require('./ascii');
 var fs = require('fs');
 
@@ -8,7 +10,7 @@ module.exports = {
 
 		Player.findOne({ token: playerToken }, function(err, player) {
 		  if (err) throw err;
-		  if (player === undefined) throw Error("Token de joueur introuvable");
+		  if (player === undefined || player === null) throw Error("Token de joueur introuvable");
 
 		  // Si il n'y a pas d'action on se contente de charger l'état actuel de la partie
 		  if(!player.isInFight()) {
@@ -63,12 +65,13 @@ module.exports = {
 		  	if (err) return handleError(err);
 
 	  		console.log("Fight linked to player found : " + fight)
-	  		Mob.findOne({ _id: fight.mob }, function (err, fight) {
+	  		Mob.findOne({ _id: fight.monster }, function (err, mob) {
 	  			// Db error handling for linked mob
 			  	if (err) return handleError(err);
 
 			  	var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
-
+			  	var choices = player.fightMoves;
+			  	
 			  	tools.fightScreen(player, mobData, choices, function(screen) {
 				  	callback(screen);
 				});

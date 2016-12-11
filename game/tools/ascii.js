@@ -70,21 +70,33 @@ module.exports = {
 
 	fightScreen: function(player, mob, choices, callback) {
 
+		// MOB INFOS
+		var mobInfos = this.mobInfos(mob);
+
 		// BAR STATS
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
-		var actions = this.bottomMenu(choices);
+		var actions = "";
+		//var actions = this.bottomMenu(choices);
 
 		// GAME SCENE ASCII
-		this.fileToJson('./game/ascii/mobs/' + mob.ascii, function(jso) {
-			gameScene = jso;
+		this.fileToJson('./game/ascii/mobs/' + mob.reference, function(jso) {
+			mobImage = jso;
 
 			var fullGameScreen = [];
-			fullGameScreen = fullGameScreen.concat(top, gameScene, actions);
+			fullGameScreen = fullGameScreen.concat(top, mobInfos, mobImage, actions);
 
 			callback(fullGameScreen);
 		});
 		
+	},
+
+	mobInfos: function (mob, callback) {
+		var jsoMenu = [];
+		jsoMenu.push(mob.name + " - HP:" + mob.life);
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
+
+		return jsoMenu;
 	}
 };
