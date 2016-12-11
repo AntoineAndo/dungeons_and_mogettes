@@ -1,9 +1,9 @@
 {
 	"name":"hills",
 	"fancyname":"Les plaines",
+	"ascii":"hills",
 	"links":[
-		"start",
-		"tower"
+		"start"
 	]
 
 }
