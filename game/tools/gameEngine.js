@@ -76,9 +76,8 @@ module.exports = {
 			  	if (err) return handleError(err);
 
 			  	var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
-			  	var choices = player.fightMoves;
 			  	
-			  	tools.fightScreen(player, mobData, choices, function(screen) {
+			  	tools.fightScreen(player, mobData, function(screen) {
 				  	callback(screen);
 				});
 			})

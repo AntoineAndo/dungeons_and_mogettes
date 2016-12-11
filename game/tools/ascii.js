@@ -54,7 +54,7 @@ module.exports = {
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
-		var actions = this.bottomMenu(null, null, choices);
+		var actionMenu = this.actionMenu(null, null, choices);
 
 		// GAME SCENE ASCII
 		this.fileToJson('./game/ascii/maps/' + scene, function(jso) {
@@ -68,7 +68,7 @@ module.exports = {
 		
 	},
 
-	fightScreen: function(player, mob, choices, callback) {
+	fightScreen: function(player, mob, callback) {
 
 		// MOB INFOS
 		var mobInfos = this.mobInfos(mob);
@@ -77,8 +77,8 @@ module.exports = {
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
-		var actions = "";
-		//var actions = this.bottomMenu(choices);
+		var actions = this.actionMenu(JSON.parse(player.fightMoves).fightMoves);
+		//var actions = "";
 
 		// GAME SCENE ASCII
 		this.fileToJson('./game/ascii/mobs/' + mob.reference, function(jso) {
@@ -94,7 +94,19 @@ module.exports = {
 
 	mobInfos: function (mob, callback) {
 		var jsoMenu = [];
-		jsoMenu.push(mob.name + " - HP:" + mob.life);
+		jsoMenu.push("   " + mob.name + " - HP:" + mob.life);
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
+
+		return jsoMenu;
+	},
+
+	actionMenu: function (choices) {
+		var jsoMenu = [];
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
+		choices.forEach(function(c, index) {
+			var commandLine = "  [" + index + "] " + c.name;
+			jsoMenu.push(commandLine);
+		});
 		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 
 		return jsoMenu;
