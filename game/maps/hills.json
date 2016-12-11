@@ -2,6 +2,7 @@
 	"name":"hills",
 	"fancyname":"Les plaines",
 	"ascii":"hills",
+	"description":"Des plaines paisibles",
 	"links":[
 		"start"
 	]

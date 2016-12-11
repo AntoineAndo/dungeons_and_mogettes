@@ -41,12 +41,9 @@ module.exports = {
 		console.log('loading map : ' + player.map);
 
 		var mapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
-		var choices = mapData.links;
-
-		console.log(mapData);
 
 		// get player map
-		tools.gameScreen(player, player.map, choices, function(screen) {
+		tools.gameScreen(player, mapData, function(screen) {
 		  	callback(screen);
 		});
 	  
@@ -75,15 +72,15 @@ module.exports = {
 			  	tools.fightScreen(player, mobData, choices, function(screen) {
 				  	callback(screen);
 				});
-			})
-		})
+			});
+		});
 
 	},
 	manageAction: function(player, action, callback) {
 
 		var previousMapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
 		var choicesArray = previousMapData.links;
-		var maxChoiceNumber = previousMapData.length - 1;
+		var maxChoiceNumber = previousMapData.links.length - 1;
 
 		if(typeof action != "number" && action > maxChoiceNumber)
 			throw Error("Votre action ne correspond à aucun choix possible");
@@ -100,16 +97,12 @@ module.exports = {
       console.log('success saved new player map');
 
       var newMapData = JSON.parse(fs.readFileSync('./game/maps/'+ newMapName +'.json', 'utf8'));
-      var newChoices = newMapData.links;
 
-      tools.gameScreen(player, newMapData.ascii, newChoices, function(screen) {
+      tools.gameScreen(player, newMapData, function(screen) {
 		  	callback(screen);
 		  });
 
     });
 
-	},
-	readMapFile: function(map) {
-		var mapData = JSON.parse(fs.readFileSync('/path/to/file.json', 'utf8'));
 	}
 };

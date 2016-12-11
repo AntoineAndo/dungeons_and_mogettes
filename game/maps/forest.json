@@ -2,6 +2,7 @@
 	"name":"forest",
 	"fancyname":"Forêt hostile",
 	"ascii":"forest",
+	"description":"Une forêt qui semble abriter une présence",
 	"links":[
 		"mountain"
 	]
