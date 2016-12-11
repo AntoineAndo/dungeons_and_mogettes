@@ -2,7 +2,7 @@ var Player = require('../models/player');
 var Fight = require('../models/fight');
 var Mob = require('../models/mob');
 var tools = require('./ascii');
-//var mobAssets = require('./mobs/assets');
+var mobAssets = require('../mobs/assets');
 var fs = require('fs');
 var _ = require('lodash/core');
 
@@ -164,7 +164,7 @@ module.exports = {
 		var maxChoiceNumber = previousMapData.links.length - 1;
 
 		if(typeof action != "number" && action > maxChoiceNumber)
-			callback("Votre action ne correspond à aucun choix possible");
+			throw Error("Votre action ne correspond à aucun choix possible");
 
 		// find the destination map according to the player choice
 		var newMapName = previousMapData.links[action];
@@ -182,13 +182,16 @@ module.exports = {
 
       if(isAgro) {
       	console.log('! PLAYER IS AGGRESSED !');
-      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/devil.json', 'utf8'));
+
+		randomMobType = mobAssets.mobTypes[Math.floor(Math.random() * mobAssets.mobTypes.length)];
+
+      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/' + randomMobType + '.json', 'utf8'));
 
       	// create mob in db
       	var mob = new Mob({
       		name : MobData.name,
 			    life : MobData.life,
-			    maxLife : MobData.maxLife,
+			    maxLife : MobData.life,
 			    exp : MobData.exp,
 			    gold : MobData.gold,
 			    ascii : MobData.ascii,
@@ -196,23 +199,24 @@ module.exports = {
       	});
 
       	mob.save(function(err) {
-			  	if (err) callback(err);
+			  	if (err) throw err;
 				  console.log('Mob created!');
+
+				  newRandomCatchphrase = mobAssets.agroPhrases[Math.floor(Math.random() * mobAssets.agroPhrases.length)].replace('%s', mob.name);
 
 				  var fight = new Fight({
 				  	playerTurn : false,
+				  	information : newRandomCatchphrase,
     				monster : mob
 				  });
 
 				  fight.save(function(err) {
-				  	if (err) callback(err);
+				  	if (err) throw err;
 				  	console.log('Fight created!');
-
-				  	//newRandomCatchphrase = mobAssets.featured[Math.floor(Math.random() * jsonContent.featured.length)];
 
 				  	player.fight = fight;
 				  	player.save(function(err) {
-				  		if (err) callback(err);
+				  		if (err) throw err;
 				  		console.log('Agro created!');
 
 				  		module.exports.loadFight(player, function(screen) {
