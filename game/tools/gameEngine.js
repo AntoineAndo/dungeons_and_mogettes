@@ -3,7 +3,7 @@ var Fight = require('../models/fight');
 var Mob = require('../models/mob');
 var tools = require('./ascii');
 var fs = require('fs');
-var _ = require('lodash-node');
+var _ = require('lodash/core');
 
 module.exports = {
 	loadState: function (playerToken, action, callback) {
@@ -82,31 +82,46 @@ module.exports = {
 
 	},
 	manageFightAction: function(player, action, callback){
-		var choicesArray = player.fightMoves;
-		var maxChoiceNumber = player.fightMoves.length;
-		console.log(maxChoiceNumber)
+		var choicesArray = JSON.parse(player.fightMoves).fightMoves;
+		var maxChoiceNumber = JSON.parse(player.fightMoves).fightMoves.length -1;
 
 		if(typeof action != "number" && action > maxChoiceNumber)
 			throw Error("Votre action ne correspond à aucun choix possible pour ce combat");
+		var actionToDo;
+		console.log(choicesArray)
+		choicesArray.forEach(function(choice){
+			console.log("ACTION="+action)
+			if(choice.id == action){
+				console.log(choice)
+				actionToDo =choice
+			}
+		});
 
-		var actionToDo = _.find(choicesArray, {id: action})
+		console.log(actionToDo)
+
 
 		Fight.findOne({ _id: player.fight }, function (err, fight) {
 			// Db error handling for fight
 		  	if (err) return handleError(err);
 
-	  		console.log("Fight linked to player found : " + fight)
+//	  		console.log("Fight linked to player found : " + fight)
 	  		Mob.findOne({ _id: fight.monster }, function (err, mob) {
 	  			// Db error handling for linked mob
 			  	if (err) return handleError(err);
-			  		
-			  	console.log(mob)
 
-			  	Mob.update({ _id: fight.mob }, {life: mob.life - actionToDo.damages})
+			  	console.log(mob);
+			  	console.log(fight.monster)
+			  	console.log(actionToDo.damages);
 
-			  	var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
+			  	mob.life = mob.life - actionToDo.damages;
 
-			  	tools.fightScreen(player, mobData, choices, function(screen) {
+			  	Mob.update({ _id: mob }, {life: mob.life}, {upsert:false}, function(errUp){
+			  		if(errUp){
+			  			console.log("torted")
+			  		}
+			  	});
+
+			  	tools.fightScreen(player, mob, function(screen) {
 				  	callback(screen);
 				});
 			})

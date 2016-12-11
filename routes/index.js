@@ -20,8 +20,8 @@ router.post('/register/:name', function(req, res, next) {
 	  name: playerName,
 	  token: generatedToken,
 	  fightMoves: JSON.stringify({"fightMoves":[
-                    {id: 1, name:"Sword Slash", damages: 20, cooldown:0, maxCooldown:5},
-                    {id: 2, name:"Fireball", damages: 50, cooldown:0, maxCooldown:5},
+                    {id: 0, name:"Sword Slash", damages: 20, cooldown:0, maxCooldown:5},
+                    {id: 1, name:"Fireball", damages: 50, cooldown:0, maxCooldown:5},
                   ]})
 	});
 
