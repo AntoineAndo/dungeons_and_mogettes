@@ -83,12 +83,16 @@ module.exports = {
 		// BOTTOM MENU ACTION
 		var actions = this.actionMenu(JSON.parse(player.fightMoves).fightMoves, fight.information);
 
+		splashImage = './game/ascii/mobs/' + mob.reference;
+		if(fight.isEnded){
+			splashImage = './game/ascii/others/treasure';
+		}
+
 		// GAME SCENE ASCII
-		this.fileToJson('./game/ascii/mobs/' + mob.reference, function(jso) {
-			mobImage = jso;
+		this.fileToJson(splashImage, function(splash) {
 
 			var fullGameScreen = [];
-			fullGameScreen = fullGameScreen.concat(top, mobInfos, mobImage, actions);
+			fullGameScreen = fullGameScreen.concat(top, mobInfos, splash, actions);
 
 			callback(fullGameScreen);
 		});

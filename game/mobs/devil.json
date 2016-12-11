@@ -1,13 +1,10 @@
 {
-	"type":"mob",
 	"name":"Démon",
 	"life": 666,
-	"ascii": "devil",
 	"attacks": [
 		{"fireball" : 10},
 		{"damnation": 40}
 	],
 	"gold": 666,
-	"exp": 100,
-	"reference": "devil"
+	"reference": "devil",
 }

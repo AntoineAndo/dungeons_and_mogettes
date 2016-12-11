@@ -2,6 +2,7 @@ var Player = require('../models/player');
 var Fight = require('../models/fight');
 var Mob = require('../models/mob');
 var tools = require('./ascii');
+var mobAssets = require('./mobs/assets');
 var fs = require('fs');
 var _ = require('lodash/core');
 
@@ -152,6 +153,7 @@ module.exports = {
       	var mob = new Mob({
       		name : MobData.name,
 			    life : MobData.life,
+			    maxLife : MobData.maxLife,
 			    exp : MobData.exp,
 			    gold : MobData.gold,
 			    ascii : MobData.ascii,
@@ -170,6 +172,8 @@ module.exports = {
 				  fight.save(function(err) {
 				  	if (err) throw err;
 				  	console.log('Fight created!');
+
+				  	//newRandomCatchphrase = mobAssets.featured[Math.floor(Math.random() * jsonContent.featured.length)];
 
 				  	player.fight = fight;
 				  	player.save(function(err) {
