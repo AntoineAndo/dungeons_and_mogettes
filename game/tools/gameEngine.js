@@ -185,13 +185,16 @@ module.exports = {
 
       if(isAgro) {
       	console.log('! PLAYER IS AGGRESSED !');
-      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/devil.json', 'utf8'));
+
+		randomMobType = mobAssets.mobTypes[Math.floor(Math.random() * mobAssets.mobTypes.length)];
+
+      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/' + randomMobType + '.json', 'utf8'));
 
       	// create mob in db
       	var mob = new Mob({
       		name : MobData.name,
 			    life : MobData.life,
-			    maxLife : MobData.maxLife,
+			    maxLife : MobData.life,
 			    exp : MobData.exp,
 			    gold : MobData.gold,
 			    ascii : MobData.ascii,
@@ -213,8 +216,6 @@ module.exports = {
 				  fight.save(function(err) {
 				  	if (err) throw err;
 				  	console.log('Fight created!');
-
-				  	
 
 				  	player.fight = fight;
 				  	player.save(function(err) {

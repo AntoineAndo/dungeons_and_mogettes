@@ -1,0 +1,10 @@
+{
+	"name":"Vipère",
+	"life": 50,
+	"attacks": [
+        {"id": 0, "name":"Growl", "damages": 10, "cooldown":0, "maxCooldown":5},
+        {"id": 1, "name":"Fireball", "damages": 50, "cooldown":0, "maxCooldown":5}
+	],
+	"gold": 25,
+	"reference": "snake"
+}

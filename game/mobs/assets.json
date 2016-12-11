@@ -3,5 +3,10 @@
 		"Un %s sauvage apparaît !",
 		"Surpris par un bruit étrange, vous vous retournez pour faire face à un %s !",
 		"Attention, un %s surgit des buissons !"
+	],
+	"mobTypes":[
+		"devil",
+		"orc",
+		"snake"
 	]
 }
