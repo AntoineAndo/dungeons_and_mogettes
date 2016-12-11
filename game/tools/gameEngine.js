@@ -10,8 +10,8 @@ module.exports = {
 	loadState: function (playerToken, action, callback) {
 
 		Player.findOne({ token: playerToken }, function(err, player) {
-		  if (err) throw err;
-		  if (player === undefined || player === null) throw Error("Token de joueur introuvable");
+		  if (err) callback(err);
+		  if (player === undefined || player === null) callback("Token de joueur introuvable");
 
 		  // Si il n'y a pas d'action on se contente de charger l'état actuel de la partie
 		  if(!player.isInFight()) {
@@ -108,7 +108,8 @@ module.exports = {
 				var maxChoiceNumber = JSON.parse(player.fightMoves).fightMoves.length -1;
 
 				if(typeof action != "number" && action > maxChoiceNumber)
-					throw Error("Votre action ne correspond à aucun choix possible pour ce combat");
+					callback("Votre action ne correspond à aucun choix possible pour ce combat");
+
 				var choicesArray = JSON.parse(player.fightMoves).fightMoves;
 				var actionToDo;
 				choicesArray.forEach(function(choice){
@@ -167,7 +168,7 @@ module.exports = {
 		var maxChoiceNumber = previousMapData.links.length - 1;
 
 		if(typeof action != "number" && action > maxChoiceNumber)
-			throw Error("Votre action ne correspond à aucun choix possible");
+			callback("Votre action ne correspond à aucun choix possible");
 
 		// find the destination map according to the player choice
 		var newMapName = previousMapData.links[action];
@@ -202,7 +203,7 @@ module.exports = {
       	});
 
       	mob.save(function(err) {
-			  	if (err) throw err;
+			  	if (err) callback(err);
 				  console.log('Mob created!');
 
 				  newRandomCatchphrase = mobAssets.agroPhrases[Math.floor(Math.random() * mobAssets.agroPhrases.length)].replace('%s', mob.name);
@@ -214,12 +215,12 @@ module.exports = {
 				  });
 
 				  fight.save(function(err) {
-				  	if (err) throw err;
+				  	if (err) callback(err);
 				  	console.log('Fight created!');
 
 				  	player.fight = fight;
 				  	player.save(function(err) {
-				  		if (err) throw err;
+				  		if (err) callback(err);
 				  		console.log('Agro created!');
 
 				  		module.exports.loadFight(player, function(screen) {
