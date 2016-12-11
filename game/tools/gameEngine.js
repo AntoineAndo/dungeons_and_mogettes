@@ -76,49 +76,74 @@ module.exports = {
 
 	},
 	manageFightAction: function(player, action, callback){
-		var choicesArray = JSON.parse(player.fightMoves).fightMoves;
-		var maxChoiceNumber = JSON.parse(player.fightMoves).fightMoves.length -1;
-
-		if(typeof action != "number" && action > maxChoiceNumber)
-			throw Error("Votre action ne correspond à aucun choix possible pour ce combat");
-		var actionToDo;
-		console.log(choicesArray)
-		choicesArray.forEach(function(choice){
-			console.log("ACTION="+action)
-			if(choice.id == action){
-				console.log(choice)
-				actionToDo =choice
-			}
-		});
-
-		console.log(actionToDo)
 
 
 		Fight.findOne({ _id: player.fight }, function (err, fight) {
 			// Db error handling for fight
 		  	if (err) return handleError(err);
 
-			// console.log("Fight linked to player found : " + fight)
-	  		Mob.findOne({ _id: fight.monster }, function (err, mob) {
-	  			// Db error handling for linked mob
-			  	if (err) return handleError(err);
+		  	if(fight.isEnded){
+				var maxChoiceNumber = 1;
+				var choicesArray = JSON.stringify({id: 0, name:"CONTINUE"});
 
-			  	console.log(mob);
-			  	console.log(fight.monster)
-			  	console.log(actionToDo.damages);
-
-			  	mob.life = mob.life - actionToDo.damages;
-
-			  	Mob.update({ _id: mob }, {life: mob.life}, {upsert:false}, function(errUp){
-			  		if(errUp){
-			  			console.log("torted")
-			  		}
+			  	Player.findOne({_id: player._id}, function(aaa, pla){
+			  		pla.fight = null;
+			  		pla.save();
 			  	});
 
-			  	tools.fightScreen(player, fight, mob, function(screen) {
-				  	callback(screen);
+		  	}
+		  	else{
+		  	
+				var maxChoiceNumber = JSON.parse(player.fightMoves).fightMoves.length -1;
+
+				if(typeof action != "number" && action > maxChoiceNumber)
+					throw Error("Votre action ne correspond à aucun choix possible pour ce combat");
+				var choicesArray = JSON.parse(player.fightMoves).fightMoves;
+				var actionToDo;
+				choicesArray.forEach(function(choice){
+					if(choice.id == action){
+						actionToDo =choice
+					}
 				});
-			})
+				// console.log("Fight linked to player found : " + fight)
+		  		Mob.findOne({ _id: fight.monster }, function (err, mob) {
+		  			// Db error handling for linked mob
+				  	if (err) return handleError(err);
+
+
+	      			var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
+	      			attackid = Math.floor((Math.random() * mobData.attacks.length));
+				  	mobAttack = mobData.attacks[attackid];
+
+				  	player.life = player.life - mobAttack.damages;
+
+				  	fight.information = "Vous attaquez le " + mob.name + " avec " + actionToDo.name + " et lui infligez " + actionToDo.damages + " points de dégats !";
+
+				  	mob.life = mob.life - actionToDo.damages;
+
+				  	if(mob.life <= 0){
+				  		fight.isEnded = true;
+				  		fight.save();
+				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or et " + mob.exp + " points d'expérience !"
+				  	}
+
+				  	Player.findOne({_id: player._id}, function(aaa, pla){
+				  		pla.life = player.life;
+				  		pla.save();
+				  	});
+
+				  	Mob.update({ _id: mob }, { life: mob.life }, { upsert:false }, function(errUp){
+				  		if(errUp){
+				  			console.log("torted")
+				  		}
+				  	});
+
+				  	tools.fightScreen(player, fight, mob, function(screen) {
+					  	callback(screen);
+					});
+				})
+		  		
+		  	}
 		})
 
 	},
