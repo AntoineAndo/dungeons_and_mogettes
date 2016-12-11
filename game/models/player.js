@@ -5,9 +5,10 @@ var fightSchema = require('./fight');
 var playerSchema = mongoose.Schema({
 		name        : String,
 		token       : String,
-    life        : Number,
+    life        : {type: Number, default: 100},
+    maxLife			: {type: Number, default: 100},
     map         : {type : String, default: "start"},
-    money       : {type: Number, default: 0},
+    money       : {type: Number, default: 50},
     fight       : {type: mongoose.Schema.Types.ObjectId,  ref: 'Fight'},
     created_at  : Date,
   	updated_at  : Date
@@ -28,7 +29,7 @@ playerSchema.pre('save', function(next) {
 });
 
 playerSchema.methods.isInFight = function() {
-    return this.fight === undefied ? false : true;
+    return typeof this.fight !== 'undefined' ? true : false;
 };
 
 // create the model for fight and expose it to our app

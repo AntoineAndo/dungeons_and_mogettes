@@ -13,7 +13,7 @@ var debug = require('./routes/debug');
 var app = express();
 
 var ConfigDB = require('./config/database.js');
-var configMongoDB = new ConfigDB;
+var configMongoDB = new ConfigDB();
 mongoose.connect(configMongoDB.getConnectionString());
 
 // view engine setup

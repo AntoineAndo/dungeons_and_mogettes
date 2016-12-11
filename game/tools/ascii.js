@@ -25,7 +25,18 @@ module.exports = {
 		});
 	},
 
-	bottomMenu: function (choices) {
+	topMenu: function(playerName, life, maxLife, gold) {
+
+		var jsoMenu = [];
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
+		jsoMenu.push("  [ " + playerName.toUpperCase() + " ]          HP : " + life + " / " + maxLife + "                        GOLD : " + gold);
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
+
+		return jsoMenu;
+
+	},
+
+	bottomMenu: function (mapName, description, choices) {
 		var jsoMenu = [];
 		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 		choices.forEach(function(c, index) {
@@ -37,8 +48,10 @@ module.exports = {
 		return jsoMenu;
 	},
 
-	gameScreen: function(life, mana, scene, choices, callback) {
+	gameScreen: function(player, scene, choices, callback) {
+
 		// BAR STATS
+		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
 		var actions = this.bottomMenu(choices);
@@ -48,10 +61,7 @@ module.exports = {
 			gameScene = jso;
 
 			var fullGameScreen = [];
-			// TODO: bar
-			fullGameScreen = fullGameScreen.concat(gameScene, actions);
-
-			console.log(fullGameScreen);
+			fullGameScreen = fullGameScreen.concat(top, gameScene, actions);
 
 			callback(fullGameScreen);
 		  });

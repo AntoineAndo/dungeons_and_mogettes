@@ -2,9 +2,9 @@
 	"name":"start",
 	"fancyname":"Prologue",
 	"ascii":"start",
+	"description":"Vous vous réveillez dans le village perdu, deux chemins s'offrent à vous...",
 	"links":[
 		"mountain",
 		"hills"
-	],
-
+	]
 }

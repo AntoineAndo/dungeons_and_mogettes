@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var gameEngine = require('../game/tools/gameEngine');
 var tools = require('../game/tools/ascii');
 var Player 		= require('../game/models/player');
+var gameEngine = require('../game/tools/gameEngine');
 
 //TODOs:
 // GET /play (replay last scene)
@@ -39,12 +39,13 @@ router.get('/play/', function(req, res, next) {
 	  	throw new Error("Vous devez renseigner un token de jeu dans le header de votre requète");
 
 
-
-	  gameEngine.loadState(playerToken);
-
-
+		gameEngine.loadState(playerToken, null, function(scene) {
+			console.log(scene);
+			res.send({ screen: scene });
+		});
 
 	  // fetch player with token
+	  /*
 	  Player.find({ token: playerToken }, function(err, user) {
 		  if (err) throw err;
 
@@ -53,7 +54,7 @@ router.get('/play/', function(req, res, next) {
 				res.render('index', { screen: jso });
 			});
 		});
-
+		*/
 });
 
 /* GET play action */
