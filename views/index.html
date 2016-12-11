@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<title>Dungeons & Mogettes</title>
+		<script
+		  src="https://code.jquery.com/jquery-3.1.1.min.js"
+		  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+		  crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+		<pre id="gameArea"></pre>
+		<button onclick="register()">Créer un personnage</button>
+		<input id="token" type="text" placeholder="Token de personnage"></input>
+		<button onclick="play()">Jouer</button>
+		<input type="text" id="action" placeholder="action (facultatif)"></input>
+	</body>
+	<script>
+		var API_URL = "http://localhost:8080/";
+
+		function register() {
+			var pseudo = window.prompt("Entrez le nom de votre personnage", "");
+			if(pseudo !== '') {
+				$.ajax({
+		     type: "POST",
+		     url: API_URL + 'register/' + pseudo,
+		     headers: { 'token': token },
+
+		     success: function(response){
+         		$("#gameArea").append('Votre token de joueur est : '+ response.token + '<br>');
+         		$("#gameArea").append('Gardez précieusement le token si vous souhaitez reprendre votre aventure');
+         		$("#token").val(response.token);
+	     		}
+     		});
+		    
+			}
+		}
+
+		function play() {
+			var token = $("#token").val();
+			var action = $("#action").val();
+
+			if(token === '') {
+				$("#gameArea").append("Veuillez renseigner votre token de personnage pour jouer, si vous n'en avez pas cliquez sur Créer un personnage.<br>");
+				return;
+			}
+
+			$.ajax({
+	     type: "GET",
+	     url: API_URL + 'play/' + action,
+	     headers: { 'token': token },
+
+	     success: function(response){
+	         $("#gameArea").html("");
+	         response.screen.forEach(function(line) {
+	         		$("#gameArea").append(line + '<br>');
+	         });
+	     }
+     });
+		}
+
+
+	</script>
+	<style>
+		body {
+			font: 14px "Consolas";
+		  background-color: black;
+		  color:white;
+		}
+
+		#gameArea {
+			height: 90%;
+			width: 100%;
+			border: 1px solid white;
+		}
+	</style>
+</html>

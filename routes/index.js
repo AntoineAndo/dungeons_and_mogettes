@@ -4,11 +4,18 @@ var tools = require('../game/tools/ascii');
 var Player 		= require('../game/models/player');
 var gameEngine = require('../game/tools/gameEngine');
 
-//TODOs:
+	
 // GET /play (replay last scene)
 // POST /play/{action} (send action to the current scene and retrieve result from action)
 // GET /inventory
 // GET /character
+
+/* GET Front */
+router.get('/', function(req, res, next) {
+	res.sendFile('index.html', {
+     root: 'views'
+   });
+});
 
 /* GET replay last scene */
 router.post('/register/:name', function(req, res, next) {
