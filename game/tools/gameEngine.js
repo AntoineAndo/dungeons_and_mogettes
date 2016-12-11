@@ -15,16 +15,18 @@ module.exports = {
 
 		  	if(action === null) {
 			  	module.exports.loadMap(player,function(screen) {
-			  		callback(screen);  
+			  		callback(screen);
 			  	});
 	  	 	} else {
 	  	 		module.exports.manageAction(player, action, function(screen) {
-			  		callback(screen);  
+			  		callback(screen);
 			  	});
 	  	 	}
 
 			} else {
-				return module.exports.loadFight(player);
+				module.exports.loadFight(player, function(screen){
+					callback(screen);
+				});
 			}
 
 
@@ -39,8 +41,10 @@ module.exports = {
 		var mapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
 		var choices = mapData.links;
 
+		console.log(mapData);
+
 		// get player map
-		tools.gameScreen(player, mapData.ascii, choices, function(screen) {
+		tools.gameScreen(player, player.map, choices, function(screen) {
 		  	callback(screen);
 		});
 	  
