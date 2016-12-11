@@ -2,7 +2,7 @@ var Player = require('../models/player');
 var Fight = require('../models/fight');
 var Mob = require('../models/mob');
 var tools = require('./ascii');
-var mobAssets = require('./mobs/assets');
+//var mobAssets = require('./mobs/assets');
 var fs = require('fs');
 var _ = require('lodash/core');
 
@@ -87,8 +87,19 @@ module.exports = {
 				var choicesArray = JSON.stringify({id: 0, name:"CONTINUE"});
 
 			  	Player.findOne({_id: player._id}, function(aaa, pla){
-			  		pla.fight = null;
+			  		pla.fight = undefined;
+
+					var previousMapData = JSON.parse(fs.readFileSync('./game/maps/'+ pla.map +'.json', 'utf8'));
+
+					var newMapName = previousMapData.links[action];
+					pla.map = newMapName;
+
 			  		pla.save();
+			  	
+					var newMapData = JSON.parse(fs.readFileSync('./game/maps/'+ newMapName +'.json', 'utf8'));
+					tools.gameScreen(pla, newMapData, function(screen) {
+						callback(screen);
+					});
 			  	});
 
 		  	}
@@ -122,13 +133,15 @@ module.exports = {
 				  	mob.life = mob.life - actionToDo.damages;
 
 				  	if(mob.life <= 0){
+				  		mob.life = 0;
 				  		fight.isEnded = true;
 				  		fight.save();
-				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or et " + mob.exp + " points d'expérience !"
+				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or !"
 				  	}
 
 				  	Player.findOne({_id: player._id}, function(aaa, pla){
 				  		pla.life = player.life;
+				  		pla.money = pla.money + mob.gold;
 				  		pla.save();
 				  	});
 

@@ -6,5 +6,5 @@
         {"id": 1, "name":"Fireball", "damages": 50, "cooldown":0, "maxCooldown":5}
 	],
 	"gold": 666,
-	"reference": "devil",
+	"reference": "devil"
 }
