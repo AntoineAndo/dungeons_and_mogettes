@@ -2,7 +2,7 @@ var Player = require('../models/player');
 var Fight = require('../models/fight');
 var Mob = require('../models/mob');
 var tools = require('./ascii');
-var mobAssets = require('../mobs/assets');
+//var mobAssets = require('./mobs/assets');
 var fs = require('fs');
 var _ = require('lodash/core');
 
@@ -76,7 +76,7 @@ module.exports = {
 
 	},
 	manageFightAction: function(player, action, callback){
-
+		var money = 0;
 
 		Fight.findOne({ _id: player.fight }, function (err, fight) {
 			// Db error handling for fight
@@ -89,15 +89,10 @@ module.exports = {
 			  	Player.findOne({_id: player._id}, function(aaa, pla){
 			  		pla.fight = undefined;
 
-					var previousMapData = JSON.parse(fs.readFileSync('./game/maps/'+ pla.map +'.json', 'utf8'));
-
-					var newMapName = previousMapData.links[action];
-					pla.map = newMapName;
-
 			  		pla.save();
 			  	
-					var newMapData = JSON.parse(fs.readFileSync('./game/maps/'+ newMapName +'.json', 'utf8'));
-					tools.gameScreen(pla, newMapData, function(screen) {
+		      		var mapData = JSON.parse(fs.readFileSync('./game/maps/'+ pla.map +'.json', 'utf8'));
+					tools.gameScreen(pla, mapData, function(screen) {
 						callback(screen);
 					});
 			  	});
@@ -137,11 +132,12 @@ module.exports = {
 				  		fight.isEnded = true;
 				  		fight.save();
 				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or !"
+				  		money = mob.gold;
 				  	}
 
 				  	Player.findOne({_id: player._id}, function(aaa, pla){
 				  		pla.life = player.life;
-				  		pla.money = pla.money + mob.gold;
+				  		pla.money += money;
 				  		pla.save();
 				  	});
 
@@ -185,16 +181,13 @@ module.exports = {
 
       if(isAgro) {
       	console.log('! PLAYER IS AGGRESSED !');
-
-		randomMobType = mobAssets.mobTypes[Math.floor(Math.random() * mobAssets.mobTypes.length)];
-
-      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/' + randomMobType + '.json', 'utf8'));
+      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/devil.json', 'utf8'));
 
       	// create mob in db
       	var mob = new Mob({
       		name : MobData.name,
 			    life : MobData.life,
-			    maxLife : MobData.life,
+			    maxLife : MobData.maxLife,
 			    exp : MobData.exp,
 			    gold : MobData.gold,
 			    ascii : MobData.ascii,
@@ -205,17 +198,16 @@ module.exports = {
 			  	if (err) throw err;
 				  console.log('Mob created!');
 
-				  newRandomCatchphrase = mobAssets.agroPhrases[Math.floor(Math.random() * mobAssets.agroPhrases.length)].replace('%s', mob.name);
-
 				  var fight = new Fight({
 				  	playerTurn : false,
-				  	information : newRandomCatchphrase,
     				monster : mob
 				  });
 
 				  fight.save(function(err) {
 				  	if (err) throw err;
 				  	console.log('Fight created!');
+
+				  	//newRandomCatchphrase = mobAssets.featured[Math.floor(Math.random() * jsonContent.featured.length)];
 
 				  	player.fight = fight;
 				  	player.save(function(err) {

@@ -75,8 +75,6 @@ module.exports = {
 		// MOB INFOS
 		var mobInfos = this.mobInfos(mob);
 
-		console.log(fight)
-
 		// BAR STATS
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
