@@ -2,7 +2,7 @@ var Player = require('../models/player');
 var Fight = require('../models/fight');
 var Mob = require('../models/mob');
 var tools = require('./ascii');
-var mobAssets = require('./mobs/assets');
+var mobAssets = require('../mobs/assets');
 var fs = require('fs');
 var _ = require('lodash/core');
 
@@ -189,8 +189,11 @@ module.exports = {
 			  	if (err) throw err;
 				  console.log('Mob created!');
 
+				  newRandomCatchphrase = mobAssets.agroPhrases[Math.floor(Math.random() * mobAssets.agroPhrases.length)].replace('%s', mob.name);
+
 				  var fight = new Fight({
 				  	playerTurn : false,
+				  	information : newRandomCatchphrase,
     				monster : mob
 				  });
 
@@ -198,7 +201,7 @@ module.exports = {
 				  	if (err) throw err;
 				  	console.log('Fight created!');
 
-				  	//newRandomCatchphrase = mobAssets.featured[Math.floor(Math.random() * jsonContent.featured.length)];
+				  	
 
 				  	player.fight = fight;
 				  	player.save(function(err) {
