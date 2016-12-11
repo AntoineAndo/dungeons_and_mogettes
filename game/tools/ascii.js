@@ -54,7 +54,7 @@ module.exports = {
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
-		var actions = this.bottomMenu(choices);
+		var actions = this.bottomMenu(null, null, choices);
 
 		// GAME SCENE ASCII
 		this.fileToJson('./game/ascii/maps/' + scene, function(jso) {

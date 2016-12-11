@@ -70,13 +70,18 @@ router.get('/play/:action', function(req, res, next) {
 
 
 
-	  gameEngine.loadState(playerToken, action);
+	  gameEngine.loadState(playerToken, action, function(scene) {
+			console.log(scene);
+			res.send({ screen: scene });
+		});
 
 
 
+	  /*
 	  tools.gameScreen("life", "mana", "start", ["Test", "Nope"],function(jso) {
 	  	res.send({ screen: jso });
 	  });
+	  */
 	}
 	catch(ex) {
 		res.status(500).send({error: ex.message});

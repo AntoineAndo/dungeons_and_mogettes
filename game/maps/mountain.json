@@ -1,6 +1,7 @@
 {
 	"name":"mountain",
 	"fancyname":"Montagne neigeuse",
+	"ascii":"mountain",
 	"links":[
 		"start",
 		"forest"

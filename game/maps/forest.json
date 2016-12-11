@@ -1,6 +1,7 @@
 {
 	"name":"forest",
 	"fancyname":"Forêt hostile",
+	"ascii":"forest",
 	"links":[
 		"mountain"
 	]
