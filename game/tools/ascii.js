@@ -75,12 +75,13 @@ module.exports = {
 		// MOB INFOS
 		var mobInfos = this.mobInfos(mob);
 
+		console.log(fight)
+
 		// BAR STATS
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
-		console.log(JSON.parse(player.fightMoves).fightMoves, fight.information);
-		var actions = this.actionMenu(JSON.parse(player.fightMoves).fightMoves);
+		var actions = this.actionMenu(JSON.parse(player.fightMoves).fightMoves, fight.information);
 
 		// GAME SCENE ASCII
 		this.fileToJson('./game/ascii/mobs/' + mob.reference, function(jso) {
