@@ -4,9 +4,9 @@ var mongoose = require('mongoose');
 var mobSchema = mongoose.Schema({
 	name  		: String,
     life  		: Number,
+    maxLife		: Number,
     exp   		: Number,
     gold  		: Number,
-    ascii 		: String,
     reference 	: String
 });
 

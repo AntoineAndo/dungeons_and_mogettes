@@ -70,7 +70,7 @@ module.exports = {
 		
 	},
 
-	fightScreen: function(player, mob, callback) {
+	fightScreen: function(player, fight, mob, callback) {
 
 		// MOB INFOS
 		var mobInfos = this.mobInfos(mob);
@@ -79,8 +79,8 @@ module.exports = {
 		var top = this.topMenu(player.name, player.life, player.maxLife, player.money);
 		
 		// BOTTOM MENU ACTION
+		console.log(JSON.parse(player.fightMoves).fightMoves, fight.information);
 		var actions = this.actionMenu(JSON.parse(player.fightMoves).fightMoves);
-		//var actions = "";
 
 		// GAME SCENE ASCII
 		this.fileToJson('./game/ascii/mobs/' + mob.reference, function(jso) {
@@ -96,14 +96,16 @@ module.exports = {
 
 	mobInfos: function (mob, callback) {
 		var jsoMenu = [];
-		jsoMenu.push("   " + mob.name + " - HP:" + mob.life);
+		jsoMenu.push("   " + mob.name + " - HP : " + mob.life + " / "  + mob.maxLife);
 		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 
 		return jsoMenu;
 	},
 
-	actionMenu: function (choices) {
+	actionMenu: function (choices, infos) {
 		var jsoMenu = [];
+		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
+		jsoMenu.push("    " + infos);
 		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 		choices.forEach(function(c, index) {
 			var commandLine = "  [" + index + "] " + c.name;

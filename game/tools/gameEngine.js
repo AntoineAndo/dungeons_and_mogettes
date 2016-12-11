@@ -67,9 +67,7 @@ module.exports = {
 	  			// Db error handling for linked mob
 			  	if (err) return handleError(err);
 
-			  	var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
-			  	
-			  	tools.fightScreen(player, mobData, function(screen) {
+			  	tools.fightScreen(player, fight, mob, function(screen) {
 				  	callback(screen);
 				});
 			});
@@ -99,7 +97,7 @@ module.exports = {
 			// Db error handling for fight
 		  	if (err) return handleError(err);
 
-//	  		console.log("Fight linked to player found : " + fight)
+			// console.log("Fight linked to player found : " + fight)
 	  		Mob.findOne({ _id: fight.monster }, function (err, mob) {
 	  			// Db error handling for linked mob
 			  	if (err) return handleError(err);
@@ -116,7 +114,7 @@ module.exports = {
 			  		}
 			  	});
 
-			  	tools.fightScreen(player, mob, function(screen) {
+			  	tools.fightScreen(player, fight, mob, function(screen) {
 				  	callback(screen);
 				});
 			})
@@ -138,10 +136,10 @@ module.exports = {
 
 		// save the new current map
 		player.save(function(err) {
-      if (err)
-        console.log('error');
+      	if (err)
+        	console.log('error');
 
-      console.log('success saved new player map');
+      	console.log('success saved new player map');
 
       // Probabilité 20% de chance de se faire agro
       var isAgro = Math.floor(Math.random() * 5) + 1 == 1 ? true : false;
