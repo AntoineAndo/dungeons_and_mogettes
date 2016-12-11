@@ -20,7 +20,7 @@ module.exports = {
 			  		callback(screen);
 			  	});
 	  	 	} else {
-	  	 		module.exports.manageAction(player, action, function(screen) {
+	  	 		module.exports.manageMapAction(player, action, function(screen) {
 			  		callback(screen);
 			  	});
 	  	 	}
@@ -52,11 +52,6 @@ module.exports = {
 		tools.gameScreen(player, mapData, function(screen) {
 		  	callback(screen);
 		});
-	  
-
-		// get map choices
-
-		// % chance agro mob
 
 	},
 	loadFight: function(player, callback) {
@@ -128,8 +123,8 @@ module.exports = {
 		})
 
 	},
-	manageAction: function(player, action, callback) {
-		console.log(player)
+	manageMapAction: function(player, action, callback) {
+
 		var previousMapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
 		var choicesArray = previousMapData.links;
 		var maxChoiceNumber = previousMapData.links.length - 1;
@@ -148,13 +143,58 @@ module.exports = {
 
       console.log('success saved new player map');
 
-      var newMapData = JSON.parse(fs.readFileSync('./game/maps/'+ newMapName +'.json', 'utf8'));
+      // Probabilité 20% de chance de se faire agro
+      var isAgro = Math.floor(Math.random() * 5) + 1 == 1 ? true : false;
 
-      tools.gameScreen(player, newMapData, function(screen) {
-		  	callback(screen);
-		  });
+      if(isAgro) {
+      	console.log('! PLAYER IS AGGRESSED !');
+      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/devil.json', 'utf8'));
+
+      	// create mob in db
+      	var mob = new Mob({
+      		name : MobData.name,
+			    life : MobData.life,
+			    exp : MobData.exp,
+			    gold : MobData.gold,
+			    ascii : MobData.ascii,
+			    reference : MobData.reference
+      	});
+
+      	mob.save(function(err) {
+			  	if (err) throw err;
+				  console.log('Mob created!');
+
+				  var fight = new Fight({
+				  	playerTurn : false,
+    				monster : mob
+				  });
+
+				  fight.save(function(err) {
+				  	if (err) throw err;
+				  	console.log('Fight created!');
+
+				  	player.fight = fight;
+				  	player.save(function(err) {
+				  		if (err) throw err;
+				  		console.log('Agro created!');
+
+				  		module.exports.loadFight(player, function(screen) {
+				  			callback(screen);
+				  		});
+			  		});
+				  });
+				});
+
+      } else {
+      	// Affichage de la nouvelle map
+      	var newMapData = JSON.parse(fs.readFileSync('./game/maps/'+ newMapName +'.json', 'utf8'));
+	      tools.gameScreen(player, newMapData, function(screen) {
+			  	callback(screen);
+			  });
+      }
 
     });
 
-	}
+	},
+
 };

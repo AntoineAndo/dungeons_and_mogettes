@@ -19,7 +19,7 @@
 
 		function register() {
 			var pseudo = window.prompt("Entrez le nom de votre personnage", "");
-			if(pseudo !== '') {
+			if(pseudo !== null) {
 				$.ajax({
 		     type: "POST",
 		     url: API_URL + 'register/' + pseudo,

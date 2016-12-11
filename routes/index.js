@@ -7,8 +7,6 @@ var gameEngine = require('../game/tools/gameEngine');
 	
 // GET /play (replay last scene)
 // POST /play/{action} (send action to the current scene and retrieve result from action)
-// GET /inventory
-// GET /character
 
 /* GET Front */
 router.get('/', function(req, res, next) {
@@ -53,18 +51,6 @@ router.get('/play/', function(req, res, next) {
 			console.log(scene);
 			res.send({ screen: scene });
 		});
-
-	  // fetch player with token
-	  /*
-	  Player.find({ token: playerToken }, function(err, user) {
-		  if (err) throw err;
-
-		  // load last game screen
-		  tools.gameScreen("life", "mana", "start", ["Test", "Nope"],function(jso) {
-				res.render('index', { screen: jso });
-			});
-		});
-		*/
 });
 
 /* GET play action */
@@ -85,13 +71,6 @@ router.get('/play/:action', function(req, res, next) {
 			res.send({ screen: scene });
 		});
 
-
-
-	  /*
-	  tools.gameScreen("life", "mana", "start", ["Test", "Nope"],function(jso) {
-	  	res.send({ screen: jso });
-	  });
-	  */
 	}
 	catch(ex) {
 		res.status(500).send({error: ex.message});
