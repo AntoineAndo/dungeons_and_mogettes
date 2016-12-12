@@ -38,7 +38,7 @@ router.post('/register/:name', function(req, res, next) {
 		});
 	}
 	catch(ex) {
-		res.status(500).send({error: ex.message});
+		res.status(500).send({token: ex.message});
 	}
 
 });
@@ -57,7 +57,7 @@ router.get('/play/', function(req, res, next) {
 		});
 	}
 	catch(ex) {
-		res.status(500).send({error: ex.message});
+		res.status(500).send({screen: ex.message});
 	}
 });
 
@@ -80,7 +80,7 @@ router.get('/play/:action', function(req, res, next) {
 
 	}
 	catch(ex) {
-		res.status(500).send({error: ex.message});
+		res.status(500).send({screen: ex.message});
 		
 	}
 });
