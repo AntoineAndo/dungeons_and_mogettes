@@ -83,7 +83,14 @@ module.exports = {
 
 		splashImage = './game/ascii/mobs/' + mob.reference;
 		if(fight.isEnded){
-			splashImage = './game/ascii/others/treasure';
+			if(player.life <= 0){
+				top = "";
+				actions = "";
+				mobInfos = "";
+				splashImage = './game/ascii/others/gameover';
+			} else {
+				splashImage = './game/ascii/others/treasure';
+			}
 		}
 
 		// GAME SCENE ASCII

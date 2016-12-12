@@ -127,8 +127,6 @@ module.exports = {
 	      			attackid = Math.floor((Math.random() * mobData.attacks.length));
 				  	mobAttack = mobData.attacks[attackid];
 
-				  	player.life = player.life - mobAttack.damages;
-
 				  	fight.information = "Vous attaquez le " + mob.name + " avec " + actionToDo.name + " et lui infligez " + actionToDo.damages + " points de dégats !";
 
 				  	mob.life = mob.life - actionToDo.damages;
@@ -139,13 +137,27 @@ module.exports = {
 				  		fight.save();
 				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or !";
 				  		money = mob.gold;
+
+				  		Player.findOne({_id: player._id}, function(aaa, pla){
+					  		pla.money += money;
+					  		pla.save();
+					  	});
+				  	} else {
+				  		player.life = player.life - mobAttack.damages;
+
+					  	if(player.life <= 0){
+					  		fight.isEnded = true;
+					  		fight.save();
+					  		Player.remove({_id: player._id}, function(err, msg){
+					  			console.log(msg);
+						  	});
+					  	}
 				  	}
 
 				  	Player.findOne({_id: player._id}, function(aaa, pla){
-				  		pla.life = player.life;
-				  		pla.money += money;
-				  		pla.save();
-				  	});
+					  		pla.life = player.life;
+					  		pla.save();
+					});
 
 				  	Mob.update({ _id: mob }, { life: mob.life }, { upsert:false }, function(errUp){
 				  		if(errUp){
