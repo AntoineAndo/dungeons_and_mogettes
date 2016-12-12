@@ -6,5 +6,8 @@
 	"links":[
 		"start",
 		"forest"
+	],
+	"mobTypes":[
+		"dwarf"
 	]
 }

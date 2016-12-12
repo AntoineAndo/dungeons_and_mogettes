@@ -9,6 +9,7 @@ var playerSchema = mongoose.Schema({
     maxLife			: {type: Number, default: 100},
     map         : {type : String, default: "start"},
     money       : {type: Number, default: 50},
+    exp         : {type: Number, default: 0},
     fight       : {type: mongoose.Schema.Types.ObjectId,  ref: 'Fight'},
     created_at  : Date,
   	updated_at  : Date,

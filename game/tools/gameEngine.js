@@ -122,7 +122,6 @@ module.exports = {
 		  			// Db error handling for linked mob
 				  	if (err) return handleError(err);
 
-
 	      			var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
 	      			attackid = Math.floor((Math.random() * mobData.attacks.length));
 				  	mobAttack = mobData.attacks[attackid];
@@ -137,13 +136,19 @@ module.exports = {
 				  		fight.save();
 				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or !";
 				  		money = mob.gold;
+				  		exp = mob.exp;
 
 				  		Player.findOne({_id: player._id}, function(aaa, pla){
 					  		pla.money += money;
+					  		pla.exp += money;
 					  		pla.save();
 					  	});
 				  	} else {
 				  		player.life = player.life - mobAttack.damages;
+				  		Player.findOne({_id: player._id}, function(aaa, pla){
+					  		pla.life -= player.life;
+					  		pla.save();
+					  	});
 
 					  	if(player.life <= 0){
 					  		fight.isEnded = true;
@@ -198,11 +203,11 @@ module.exports = {
 
       // Probabilité 20% de chance de se faire agro
       var isAgro = Math.floor(Math.random() * 5) + 1 == 1 ? true : false;
+      var mapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
 
-      if(isAgro) {
-      	console.log('! PLAYER IS AGGRESSED !');
-
-		randomMobType = mobAssets.mobTypes[Math.floor(Math.random() * mobAssets.mobTypes.length)];
+      if(isAgro && mapData.mobTypes.length > 0) {
+      	
+		randomMobType = mapData.mobTypes[Math.floor(Math.random() * mapData.mobTypes.length)];
 
       	var MobData = JSON.parse(fs.readFileSync('./game/mobs/' + randomMobType + '.json', 'utf8'));
 

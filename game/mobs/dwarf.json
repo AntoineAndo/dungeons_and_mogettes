@@ -1,0 +1,10 @@
+{
+	"name":"Guerrier nain",
+	"life": 250,
+	"attacks": [
+        {"id": 0, "name":"Axe hit", "damages": 30, "cooldown":0, "maxCooldown":5}
+	],
+	"rarity" : "common",
+	"gold": 500,
+	"reference": "dwarf"
+}

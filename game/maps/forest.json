@@ -5,5 +5,9 @@
 	"description":"Une forêt qui semble abriter une présence",
 	"links":[
 		"mountain"
+	],
+	"mobTypes":[
+		"orc",
+		"lizardman"
 	]
 }

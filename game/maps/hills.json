@@ -5,6 +5,9 @@
 	"description":"Des plaines paisibles",
 	"links":[
 		"start"
+	],
+	"mobTypes":[
+		"snake",
+		"lizardman"
 	]
-
 }

@@ -2,12 +2,8 @@
 	"agroPhrases":[
 		"Un %s sauvage apparaît !",
 		"Surpris par un bruit étrange, vous vous retournez pour faire face à un %s !",
-		"Attention, un %s surgit des buissons !"
-	],
-	"mobTypes":[
-		"devil",
-		"orc",
-		"snake",
-		"lizardman"
+		"Attention, un %s surgit des buissons !",
+		"Vous trébuchez par terre et attirez sur vous l'attention d'un %s !",
+		"Un %s vous surprend en train d'uriner contre un arbre."
 	]
 }

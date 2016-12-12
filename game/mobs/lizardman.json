@@ -2,9 +2,10 @@
 	"name":"Homme lézard",
 	"life": 400,
 	"attacks": [
-        {"id": 0, "name":"Growl", "damages": 10, "cooldown":0, "maxCooldown":5},
-        {"id": 1, "name":"Fireball", "damages": 50, "cooldown":0, "maxCooldown":5}
+        {"id": 0, "name":"Coup du lézard", "damages": 25, "cooldown":0, "maxCooldown":5},
+        {"id": 1, "name":"Langue fourchue", "damages": 10, "cooldown":0, "maxCooldown":5}
 	],
+	"rarity" : "common",
 	"gold": 300,
 	"exp" : 200,
 	"reference": "lizardman"
