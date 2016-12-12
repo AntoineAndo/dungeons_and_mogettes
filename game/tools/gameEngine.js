@@ -164,7 +164,7 @@ module.exports = {
 		var maxChoiceNumber = previousMapData.links.length - 1;
 
 		if(typeof action != "number" && action > maxChoiceNumber)
-			throw Error("Votre action ne correspond à aucun choix possible");
+			callback("Votre action ne correspond à aucun choix possible");
 
 		// find the destination map according to the player choice
 		var newMapName = previousMapData.links[action];
