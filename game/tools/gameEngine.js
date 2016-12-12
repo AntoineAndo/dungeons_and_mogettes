@@ -115,9 +115,8 @@ module.exports = {
 						actionToDo = choice;
 					}
 				});
-				// console.log("Fight linked to player found : " + fight)
+
 		  		Mob.findOne({ _id: fight.monster }, function (err, mob) {
-		  			// Db error handling for linked mob
 				  	if (err) return handleError(err);
 
 	      			var mobData = JSON.parse(fs.readFileSync('./game/mobs/'+ mob.reference +'.json', 'utf8'));
@@ -130,7 +129,9 @@ module.exports = {
 
 				  	mob.life = mob.life - actionToDo.damages;
 
+				  	// Vérification de l'état du mob
 				  	if(mob.life <= 0){
+				  		// Le mob est mort
 				  		mob.life = 0;
 				  		fight.isEnded = true;
 				  		fight.save();
@@ -144,9 +145,11 @@ module.exports = {
 					  		pla.save();
 					  	});
 				  	} else {
-				  		player.life = player.life - mobAttack.damages;
+				  		// Mob pas mort donc
+				  		// Prise en compte de l'attaque du mob
+				  		playerLife = player.life - mobAttack.damages;
 				  		Player.findOne({_id: player._id}, function(aaa, pla){
-					  		pla.life -= player.life;
+					  		pla.life = playerLife;
 					  		pla.save();
 					  	});
 
@@ -158,11 +161,6 @@ module.exports = {
 						  	});
 					  	}
 				  	}
-
-				  	Player.findOne({_id: player._id}, function(aaa, pla){
-					  		pla.life = player.life;
-					  		pla.save();
-					});
 
 				  	Mob.update({ _id: mob }, { life: mob.life }, { upsert:false }, function(errUp){
 				  		if(errUp){

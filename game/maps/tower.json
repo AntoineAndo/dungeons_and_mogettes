@@ -1,7 +1,7 @@
 {
 	"name":"tower",
 	"fancyname":"Tour abandonnée",
-	"ascii":"mountain",
+	"ascii":"tower",
 	"description":"Vous tombez sur une tour abandonnée sur votre chemin.",
 	"links":[
 		"forest"
