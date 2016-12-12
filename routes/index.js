@@ -17,32 +17,36 @@ router.get('/', function(req, res, next) {
 
 /* GET replay last scene */
 router.post('/register/:name', function(req, res, next) {
+	try {
+		var playerName = req.params.name;
+		var generatedToken = Array(20+1).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 20);
 
-	var playerName = req.params.name;
-	var generatedToken = Array(20+1).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 20);
+		var newPlayer = new Player({
+		  name: playerName,
+		  token: generatedToken,
+		  fightMoves: JSON.stringify({"fightMoves":[
+	                    {id: 0, name:"Sword Slash", damages: 20, cooldown:0, maxCooldown:5},
+	                    {id: 1, name:"Fireball", damages: 50, cooldown:0, maxCooldown:5},
+	                  ]})
+		});
 
-	var newPlayer = new Player({
-	  name: playerName,
-	  token: generatedToken,
-	  fightMoves: JSON.stringify({"fightMoves":[
-                    {id: 0, name:"Sword Slash", damages: 20, cooldown:0, maxCooldown:5},
-                    {id: 1, name:"Fireball", damages: 50, cooldown:0, maxCooldown:5},
-                  ]})
-	});
+		newPlayer.save(function(err) {
+		  if (err) throw err;
+			  console.log('User created!');
 
-	newPlayer.save(function(err) {
-	  if (err) throw err;
-		  console.log('User created!');
-
-		res.send({token: generatedToken});
-	});
+			res.send({token: generatedToken});
+		});
+	}
+	catch(ex) {
+		res.status(500).send({error: ex.message});
+	}
 
 });
 
 
 /* GET replay last scene */
 router.get('/play/', function(req, res, next) {
-
+	try {
 	var playerToken = req.headers.token; // must be set as header with name "token"
 	  if(playerToken === undefined)
 	  	throw new Error("Vous devez renseigner un token de jeu dans le header de votre requète");
@@ -51,6 +55,10 @@ router.get('/play/', function(req, res, next) {
 			console.log(scene);
 			res.send({ screen: scene });
 		});
+	}
+	catch(ex) {
+		res.status(500).send({error: ex.message});
+	}
 });
 
 /* GET play action */

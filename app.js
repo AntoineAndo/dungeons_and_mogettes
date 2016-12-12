@@ -32,6 +32,10 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/debug', debug);
 
+process.on('uncaughtException', function (err) {
+  console.log(err);
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
