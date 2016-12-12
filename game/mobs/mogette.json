@@ -1,0 +1,11 @@
+{
+	"name":"Mogette féérique",
+	"life": 500,
+	"attacks": [
+        {"id": 0, "name":"Bénédiction de DeVilliers", "damages": -25, "cooldown":0, "maxCooldown":5}
+	],
+	"rarity" : "common",
+	"gold": 0,
+	"exp" : 0,
+	"reference": "mogette"
+}

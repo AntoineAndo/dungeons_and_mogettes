@@ -1,0 +1,12 @@
+{
+	"name":"tower",
+	"fancyname":"Tour abandonnée",
+	"ascii":"mountain",
+	"description":"Vous tombez sur une tour abandonnée sur votre chemin.",
+	"links":[
+		"forest"
+	],
+	"mobTypes":[
+		"snake"
+	]
+}

@@ -4,7 +4,8 @@
 	"ascii":"forest",
 	"description":"Une forêt qui semble abriter une présence",
 	"links":[
-		"mountain"
+		"mountain",
+		"tower"
 	],
 	"mobTypes":[
 		"orc",

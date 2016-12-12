@@ -4,7 +4,7 @@ var mobSchema = require('./mob');
 // define the schema for our fight model
 var fightSchema = mongoose.Schema({
 	playerTurn  : Boolean,
-	information	: String,
+	information	: [String],
     monster 	: {type: mongoose.Schema.Types.ObjectId,  ref: 'Mob'},
     isEnded	: {type: Boolean, default: false}
 });

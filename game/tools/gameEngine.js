@@ -99,9 +99,7 @@ module.exports = {
 						callback(screen);
 					});
 			  	});
-
-		  	}
-		  	else{
+		  	} else {
 		  	
 				var maxChoiceNumber = JSON.parse(player.fightMoves).fightMoves.length -1;
 
@@ -126,7 +124,9 @@ module.exports = {
 	      			attackid = Math.floor((Math.random() * mobData.attacks.length));
 				  	mobAttack = mobData.attacks[attackid];
 
-				  	fight.information = "Vous attaquez le " + mob.name + " avec " + actionToDo.name + " et lui infligez " + actionToDo.damages + " points de dégats !";
+					fight.information = [];
+				  	fight.information.push("Vous attaquez le " + mob.name + " avec " + actionToDo.name + " et lui infligez " + actionToDo.damages + " points de dégâts !");
+				  	fight.information.push(mob.name + " riposte avec " + mobAttack.name + " et vous inflige " + mobAttack.damages + " points de dégâts !");
 
 				  	mob.life = mob.life - actionToDo.damages;
 
@@ -201,54 +201,56 @@ module.exports = {
 
       	console.log('success saved new player map');
 
-      // Probabilité 20% de chance de se faire agro
-      var isAgro = Math.floor(Math.random() * 5) + 1 == 1 ? true : false;
-      var mapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
+        // Probabilité 20% de chance de se faire agro
+        var isAgro = Math.floor(Math.random() * 5) + 1 == 1 ? true : false;
+        var mapData = JSON.parse(fs.readFileSync('./game/maps/'+ player.map +'.json', 'utf8'));
 
-      if(isAgro && mapData.mobTypes.length > 0) {
+        if(isAgro && mapData.mobTypes.length > 0) {
       	
-		randomMobType = mapData.mobTypes[Math.floor(Math.random() * mapData.mobTypes.length)];
+			randomMobType = mapData.mobTypes[Math.floor(Math.random() * mapData.mobTypes.length)];
 
-      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/' + randomMobType + '.json', 'utf8'));
+	      	var MobData = JSON.parse(fs.readFileSync('./game/mobs/' + randomMobType + '.json', 'utf8'));
 
-      	// create mob in db
-      	var mob = new Mob({
-      		name : MobData.name,
+	      	// create mob in db
+	      	var mob = new Mob({
+	      		name : MobData.name,
 			    life : MobData.life,
 			    maxLife : MobData.life,
 			    exp : MobData.exp,
 			    gold : MobData.gold,
 			    ascii : MobData.ascii,
 			    reference : MobData.reference
-      	});
+	      	});
 
-      	mob.save(function(err) {
+      		mob.save(function(err) {
 			  	if (err) throw err;
-				  console.log('Mob created!');
+			    console.log('Mob created!');
 
-				  newRandomCatchphrase = mobAssets.agroPhrases[Math.floor(Math.random() * mobAssets.agroPhrases.length)].replace('%s', mob.name);
+			    var infosFight = [];
+			    newRandomCatchphrase = mobAssets.agroPhrases[Math.floor(Math.random() * mobAssets.agroPhrases.length)].replace('%s', mob.name);
+			    infosFight.push(newRandomCatchphrase);
 
-				  var fight = new Fight({
+			    var fight = new Fight({
 				  	playerTurn : false,
-				  	information : newRandomCatchphrase,
-    				monster : mob
-				  });
+				  	information : infosFight,
+					monster : mob
+			    });
 
-				  fight.save(function(err) {
-				  	if (err) throw err;
-				  	console.log('Fight created!');
+			    fight.save(function(err) {
+			  	if (err) throw err;	
+			  	console.log('Fight created!');
 
-				  	player.fight = fight;
-				  	player.save(function(err) {
-				  		if (err) throw err;
-				  		console.log('Agro created!');
+			  	player.fight = fight;
+			  	player.save(function(err) {
+			  		if (err) throw err;
+			  		console.log('Agro created!');
 
-				  		module.exports.loadFight(player, function(screen) {
-				  			callback(screen);
-				  		});
+			  		module.exports.loadFight(player, function(screen) {
+			  			callback(screen);
 			  		});
-				  });
-				});
+		  		});
+			});
+		});
 
       } else {
       	// Affichage de la nouvelle map

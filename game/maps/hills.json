@@ -7,7 +7,6 @@
 		"start"
 	],
 	"mobTypes":[
-		"snake",
-		"lizardman"
+		"mogette"
 	]
 }

@@ -115,7 +115,10 @@ module.exports = {
 	actionMenu: function (choices, infos) {
 		var jsoMenu = [];
 		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
-		jsoMenu.push("    " + infos);
+		infos.forEach(function(c, index) {
+			var info = c;
+			jsoMenu.push("  "+info);
+		});
 		jsoMenu.push("+-----------------------------------------------------------------------------------------+");
 		choices.forEach(function(c, index) {
 			var commandLine = "  [" + index + "] " + c.name;
