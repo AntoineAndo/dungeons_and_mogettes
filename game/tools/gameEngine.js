@@ -11,7 +11,10 @@ module.exports = {
 
 		Player.findOne({ token: playerToken }, function(err, player) {
 		  if (err) callback(err);
-		  if (player === undefined || player === null) callback("Token de joueur introuvable");
+		  if (player === undefined || player === null) {
+		  	callback("Token de joueur introuvable");
+		  	throw Error("Token de joueur introuvable");
+		  } 
 
 		  // Si il n'y a pas d'action on se contente de charger l'état actuel de la partie
 		  if(!player.isInFight()) {
@@ -102,14 +105,16 @@ module.exports = {
 		  	
 				var maxChoiceNumber = JSON.parse(player.fightMoves).fightMoves.length -1;
 
-				if(typeof action != "number" && action > maxChoiceNumber)
+				if(typeof action != "number" && action > maxChoiceNumber) {
 					callback("Votre action ne correspond à aucun choix possible pour ce combat");
+					throw Error("Votre action ne correspond à aucun choix possible pour ce combat");
+				}
 
 				var choicesArray = JSON.parse(player.fightMoves).fightMoves;
 				var actionToDo;
 				choicesArray.forEach(function(choice){
 					if(choice.id == action){
-						actionToDo =choice
+						actionToDo = choice;
 					}
 				});
 				// console.log("Fight linked to player found : " + fight)
@@ -132,7 +137,7 @@ module.exports = {
 				  		mob.life = 0;
 				  		fight.isEnded = true;
 				  		fight.save();
-				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or !"
+				  		fight.information = "Vous triomphez de votre adversaire ! Vous remportez " + mob.gold + " pièces d'or !";
 				  		money = mob.gold;
 				  	}
 
@@ -144,7 +149,7 @@ module.exports = {
 
 				  	Mob.update({ _id: mob }, { life: mob.life }, { upsert:false }, function(errUp){
 				  		if(errUp){
-				  			console.log("torted")
+				  			console.log("torted");
 				  		}
 				  	});
 
@@ -163,8 +168,10 @@ module.exports = {
 		var choicesArray = previousMapData.links;
 		var maxChoiceNumber = previousMapData.links.length - 1;
 
-		if(typeof action != "number" && action > maxChoiceNumber)
-			callback("Votre action ne correspond à aucun choix possible");
+		if(typeof action != "number" && action > maxChoiceNumber) { 
+			callback("Votre action ne correspond à aucun choix possible"); 
+			throw Error("Votre action ne correspond à aucun choix possible"); 
+		}
 
 		// find the destination map according to the player choice
 		var newMapName = previousMapData.links[action];

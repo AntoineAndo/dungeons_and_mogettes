@@ -51,9 +51,14 @@
 
 	     success: function(response){
 	         $("#gameArea").html("");
-	         response.screen.forEach(function(line) {
-	         		$("#gameArea").append(line + '<br>');
-	         });
+	         if(typeof response.screen === 'string') {
+	         	$("#gameArea").append(response.screen);
+	         }
+	         else {
+		         response.screen.forEach(function(line) {
+		         		$("#gameArea").append(line + '<br>');
+		         });
+	     	}
 	     }
      });
 		}
