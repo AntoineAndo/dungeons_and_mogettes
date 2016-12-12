@@ -21,7 +21,7 @@ Npm 3.10.9
 - Don't die
 
 
-## Documentaion
+## Documentation
 A swagger describing the API routes is available under doc folder
 
 ## Tests
